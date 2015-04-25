@@ -8,7 +8,4 @@ def check_signature(signature, timestamp, nonce, echostr):
     tmplist.sort()
     tmpstr = "%s%s%s" % tuple(tmplist)
     tmpstr = hashlib.sha1(tmpstr.encode()).hexdigest()
-    if tmpstr == signature:
-        return echostr
-    else:
-        return ""
+    return tmpstr == signature

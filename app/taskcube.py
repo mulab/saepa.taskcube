@@ -2,6 +2,8 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from . import check
+from . import xmlparse
+from . import handler
 
 
 app = Flask(__name__)
@@ -20,12 +22,17 @@ def wechat_check():
         request.args.get('nonce', ''),
         request.args.get('echostr', '')
     )
-    return check_result
+    if check_result:
+        return request.args.get('echostr', '')
+    else:
+        return ''
 
 
 @app.route('/wechat', methods=['POST'])
 def wechat_response():
-    pass
+    message = xmlparse.get_message_by_xml(request.data)
+    reply = handler.message_handler(message)
+    return render_template('reply.xml', msg=reply)
 
 
 if __name__ == '__main__':
