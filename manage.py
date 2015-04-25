@@ -1,5 +1,5 @@
 from flask.ext.script import Manager
-from taskcube import app
+from app.taskcube import app
 
 
 manager = Manager(app)
