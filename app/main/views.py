@@ -31,5 +31,13 @@ def wechat_check():
 @main.route('/wechat', methods=['POST'])
 def wechat_response():
     message = xmlparse.get_message_by_xml(request.data)
-    reply = handler.message_handler(message)
+    openid = message.get('FromUserName', '')
+    user = User.query.filter_by(openid=openid).first()
+    if user is None:
+        user = User(openid=openid, credits=0)
+    print(user)
+    user.credits += 1
+    db.session.add(user)
+    db.session.commit()
+    reply = handler.construct_reply_message(message, '你获得了积分：%d' % user.credits)
     return render_template('reply.xml', msg=reply)
