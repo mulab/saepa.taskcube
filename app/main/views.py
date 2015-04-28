@@ -1,6 +1,7 @@
 from flask import request
 from flask import render_template
 from flask import redirect
+from flask import Markup
 from . import main
 from .forms import UserForm
 from .. import db
@@ -37,7 +38,7 @@ def wechat_response():
     if user is None:
         reply = handler.construct_reply_message(
             message,
-            '你需要绑定账号：<a href="taskcube.hqythu.me/wechat/login/%s">点击</a>' % openid
+            Markup('你需要绑定账号：<a href="taskcube.hqythu.me/wechat/login/%s">点击</a>' % openid)
         )
     else:
         user.credits += 1
