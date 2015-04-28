@@ -38,7 +38,7 @@ def wechat_response():
     if user is None:
         reply = handler.construct_reply_message(
             message,
-            Markup('你需要绑定账号：<a href="taskcube.hqythu.me/wechat/login/%s">点击</a>' % openid)
+            Markup('你需要绑定账号：http://taskcube.hqythu.me/wechat/login/%s' % openid)
         )
     else:
         user.credits += 1
