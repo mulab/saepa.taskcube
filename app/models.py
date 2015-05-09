@@ -19,7 +19,7 @@ class Task(db.Model):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(64))
-    credits = db.Column(db.Integer)
+    credit = db.Column(db.Integer)
     datetime = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
 

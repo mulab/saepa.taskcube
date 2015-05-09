@@ -1,0 +1,2 @@
+class TaskcubeException(Exception):
+    pass

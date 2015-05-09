@@ -8,7 +8,8 @@ from .. import db
 from ..models import User
 from .util import check
 from .util import xmlparse
-from .util import handler
+from . import handler
+from .exceptions import *
 
 
 @main.route('/', methods=['GET'])
@@ -33,18 +34,18 @@ def wechat_check():
 @main.route('/wechat', methods=['POST'])
 def wechat_response():
     message = xmlparse.get_message_by_xml(request.data)
-    openid = message.get('FromUserName', '')
-    user = User.query.filter_by(openid=openid).first()
-    if user is None:
+    try:
+        reply = handler.handler(message)
+    except UserNotRegisteredException:
         reply = handler.construct_reply_message(
             message,
             Markup('你需要绑定账号：http://taskcube.hqythu.me/wechat/login/%s' % openid)
         )
-    else:
-        user.credits += 1
-        db.session.add(user)
-        db.session.commit()
-        reply = handler.construct_reply_message(message, '你获得了积分：%d' % user.credits)
+    except CommandNotFoundException:
+        reply = handler.construct_reply_message(
+            message,
+            "不知道您在说什么"
+        )
     return render_template('reply.xml', msg=reply)
 
 
