@@ -9,7 +9,7 @@ class User(db.Model):
     mobile = db.Column(db.Unicode(64), default='')
     openid = db.Column(db.Unicode(128), default='', unique=True, index=True)
     credits = db.Column(db.Integer, default=0)
-    tasks = db.relationship('Task', backref='user')
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return '<User: %s, ID: %s, Credits: %s>' % (self.name, self.openid, self.credits)
@@ -18,6 +18,7 @@ class User(db.Model):
 class Task(db.Model):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.Unicode(64))
     name = db.Column(db.Unicode(64))
     credit = db.Column(db.Integer)
     datetime = db.Column(db.DateTime)

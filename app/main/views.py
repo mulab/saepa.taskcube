@@ -39,13 +39,29 @@ def wechat_response():
     except UserNotRegisteredException:
         reply = handler.construct_reply_message(
             message,
-            Markup('你需要绑定账号：http://taskcube.hqythu.me/wechat/login/%s' % openid)
+            Markup('你需要绑定账号：http://taskcube.hqythu.me/wechat/login/%s' %
+                   message.get('FromUserName', ''))
         )
     except CommandNotFoundException:
         reply = handler.construct_reply_message(
             message,
-            "不知道您在说什么"
+            '不知道您在说什么'
         )
+    except AlreadyDoTodayException:
+        reply = handler.construct_reply_message(
+            message,
+            '您今天已经领取过该任务了'
+        )
+    except TimeNotMatchException:
+        reply = handler.construct_reply_message(
+            message,
+            '现在这个时间不能领取该任务'
+        )
+    # except:
+    #     reply = handler.construct_reply_message(
+    #         message,
+    #         '系统出了一点问题'
+    #     )
     return render_template('reply.xml', msg=reply)
 
 

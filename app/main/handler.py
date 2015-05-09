@@ -32,8 +32,8 @@ def handler(message):
         task_config = TaskList[message['Content']]
         task_config['validator'](user)
         user.credits += task_config['credit']
-        task = Task(name=task_config['name'], credit=task_config['credit'],
-                    datetime=datetime.now(), user=user)
+        task = Task(key=message['Content'],name=task_config['name'],
+                    credit=task_config['credit'], datetime=datetime.now(), user=user)
         db.session.add(user)
         db.session.add(task)
         db.session.commit()
