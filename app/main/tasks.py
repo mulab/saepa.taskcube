@@ -15,7 +15,7 @@ def eachday_validator_generator(task_key):
     def eachday_validator(user):
         recent_task = user.tasks.filter_by(key=task_key).order_by(Task.datetime.desc()).first()
         if recent_task is None:
-           return
+            return
         now = (datetime.utcnow() + timedelta(hours=8)).date()
         if (recent_task.datetime + timedelta(hours=8)).date() == now:
             raise AlreadyDoTodayException()
