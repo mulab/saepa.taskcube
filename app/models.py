@@ -12,7 +12,7 @@ class User(db.Model):
     tasks = db.relationship('Task', backref='user')
 
     def __repr__(self):
-        return '<User: %s, ID: %s, Credits: %d>' % (self.name, self.openid, self.credits)
+        return '<User: %s, ID: %s, Credits: %s>' % (self.name, self.openid, self.credits)
 
 
 class Task(db.Model):
@@ -24,5 +24,5 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
 
     def __repr__(self):
-        return '<Task: %s, Credits: %s, User: %d, DateTime: %s>' % \
-               (self.name, self.credits, self.user_id, str(self.datetime))
+        return '<Task: %s, Credits: %s, User: %s, DateTime: %s>' % \
+               (self.name, self.credit, self.user_id, self.datetime)
