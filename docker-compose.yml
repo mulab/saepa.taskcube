@@ -1,2 +1,4 @@
 web:
   build: .
+  volumes:
+   - .:/www
