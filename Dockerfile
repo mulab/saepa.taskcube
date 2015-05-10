@@ -4,7 +4,6 @@ ENV FLASK_CONFIG=production
 WORKDIR /www
 COPY requirements.txt /www/
 RUN pip install -r requirements.txt
-RUN python manage.py db upgrade
 
 EXPOSE 5000
 
