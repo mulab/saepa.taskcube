@@ -62,7 +62,7 @@ def wechat_response():
     #         message,
     #         '系统出了一点问题'
     #     )
-    return render_template('reply.xml', msg=reply)
+    return render_template('reply_text.xml', msg=reply)
 
 
 @main.route('/wechat/success', methods=['GET'])
