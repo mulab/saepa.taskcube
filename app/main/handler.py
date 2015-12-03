@@ -4,6 +4,7 @@ from .. import db
 from ..models import User
 from ..models import Task
 from datetime import datetime
+from .util import construct_text_message
 
 
 def view_tasks(user):
@@ -32,7 +33,7 @@ def handler(message):
         task_config = TaskList[message['Content']]
         task_config['validator'](user)
         user.credits += task_config['credit']
-        task = Task(key=message['Content'],name=task_config['name'],
+        task = Task(key=message['Content'], name=task_config['name'],
                     credit=task_config['credit'], datetime=datetime.now(), user=user)
         db.session.add(user)
         db.session.add(task)
@@ -40,15 +41,5 @@ def handler(message):
         reply = "您成功完成了任务：%s，获得了积分：%d" % (task.name, task.credit)
     else:
         raise CommandNotFoundException()
-    return construct_reply_message(message, reply)
-
-
-def construct_reply_message(msg, text):
-    reply = {
-        'FromUserName': msg['ToUserName'],
-        'ToUserName': msg['FromUserName'],
-        'MsgType': 'text',
-        'CreateTime': msg['CreateTime'],
-        'Content': text
-    }
     return reply
+
