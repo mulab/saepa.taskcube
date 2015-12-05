@@ -13,11 +13,11 @@ def empty_validator(user):
 
 def eachday_validator_generator(task_key):
     def eachday_validator(user):
-        recent_task = user.tasks.filter_by(key=task_key).order_by(Task.datetime.desc()).first()
+        recent_task = user.tasks.filter_by(key=task_key).order_by(Task.start_time.desc()).first()
         if recent_task is None:
             return
         now = (datetime.utcnow() + timedelta(hours=8)).date()
-        if (recent_task.datetime + timedelta(hours=8)).date() == now:
+        if (recent_task.start_time + timedelta(hours=8)).date() == now:
             raise AlreadyDoTodayException()
     return eachday_validator
 
@@ -44,9 +44,10 @@ TaskList = {
                                               time(hour=7, minute=0)),
         'credit': 2
     },
-    '3': {
-        'name': '3',
+    'run': {
+        'name': 'run',
+        # 'validator': eachday_validator_generator('run'),
         'validator': empty_validator,
-        'credit': 3
+        'credit': 1
     }
 }

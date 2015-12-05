@@ -1,4 +1,5 @@
 from . import db
+from datetime import timedelta
 
 
 class User(db.Model):
@@ -9,6 +10,7 @@ class User(db.Model):
     mobile = db.Column(db.Unicode(64), default='')
     openid = db.Column(db.Unicode(128), default='', unique=True, index=True)
     credits = db.Column(db.Integer, default=0)
+    total_time = db.Column(db.Interval, default=timedelta(0))
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
@@ -21,7 +23,11 @@ class Task(db.Model):
     key = db.Column(db.Unicode(64))
     name = db.Column(db.Unicode(64))
     credit = db.Column(db.Integer)
-    datetime = db.Column(db.DateTime)
+    need_validation = db.Column(db.Boolean)
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+    duration = db.Column(db.Interval)
+    finished = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
 
     def __repr__(self):

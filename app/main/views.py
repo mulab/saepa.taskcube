@@ -35,10 +35,11 @@ def wechat_check():
 @main.route('/wechat', methods=['POST'])
 def wechat_response():
     message = xmlparse.get_message_by_xml(request.data)
+    # TODO: 在Exception类内部处理回复信息而不是在这里使用多路的选择
     try:
         reply = construct_text_message(
             message,
-            handler.handler(message)
+            handler.handle(message)
         )
     except UserNotRegisteredException:
         reply = construct_text_message(
@@ -61,11 +62,11 @@ def wechat_response():
             message,
             '现在这个时间不能领取该任务'
         )
-    except:
-        reply = construct_text_message(
-            message,
-            '系统出了一点问题'
-        )
+    # except:
+    #     reply = construct_text_message(
+    #         message,
+    #         '系统出了一点问题'
+    #     )
     return render_template('reply_text.xml', msg=reply)
 
 
