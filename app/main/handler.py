@@ -69,7 +69,7 @@ def handle(message):
         db.session.add(task)
         db.session.add(user)
         db.session.commit()
-        reply = '完成了跑步，本次跑步时间: %s s。累计跑步 %s s' % (duration.total_seconds(), user.total_time)
+        reply = '完成了跑步，本次跑步时间: %s s。累计跑步 %s s' % (duration, user.total_time)
     else:
         raise CommandNotFoundException()
     return reply
