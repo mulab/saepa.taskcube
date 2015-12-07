@@ -94,5 +94,5 @@ def login(openid):
 
 @main.route('/wechat/share/<userid>', methods=['GET', 'POST'])
 def share(userid):
-    user = User.query.filter_by(username=userid).first()
+    user = User.query.filter_by(id=userid).first()
     return render_template('share.html', user=user)
