@@ -6,6 +6,7 @@ from . import main
 from .forms import UserForm
 from .. import db
 from ..models import User
+from ..models import Task
 from .util import check
 from .util import xmlparse
 from .util import construct_text_message
@@ -92,7 +93,8 @@ def login(openid):
     return render_template('login.html', form=form)
 
 
-@main.route('/wechat/share/<userid>', methods=['GET', 'POST'])
-def share(userid):
+@main.route('/wechat/share/<userid>/<taskid>', methods=['GET', 'POST'])
+def share(userid, taskid):
     user = User.query.filter_by(id=userid).first()
-    return render_template('share.html', user=user)
+    task = Task.query.filter_by(id=taskid).first()
+    return render_template('share.html', user=user, task=task)

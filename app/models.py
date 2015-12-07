@@ -11,6 +11,7 @@ class User(db.Model):
     openid = db.Column(db.Unicode(128), default='', unique=True, index=True)
     credits = db.Column(db.Integer, default=0)
     total_time = db.Column(db.Interval, default=timedelta(0))
+    total_distance = db.Column(db.Integer, default=0)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
@@ -27,6 +28,8 @@ class Task(db.Model):
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     duration = db.Column(db.Interval)
+    speed = db.Column(db.Float)
+    distance = db.Column(db.Integer)
     finished = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
 

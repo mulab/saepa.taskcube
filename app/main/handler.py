@@ -40,14 +40,15 @@ def handle(message):
         db.session.add(task)
         db.session.commit()
         reply = "您成功完成了任务：%s，获得了积分：%d" % (task.name, task.credit)
-    elif message['Content'] == 'start':
+    elif message['Content'] == '01' or message['Content'] == '02':
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
             return '你还有跑步没有完成'
         task_config = TaskList['run']
         task_config['validator'](user)
+        speed = 1.0 if message['Content'] == '01' else 2.0
         task = Task(key='run', name='run', credit=0, start_time=datetime.now(),
-                    user=user, finished=False, need_validation=True)
+                    user=user, finished=False, need_validation=True, speed=speed)
         db.session.add(task)
         db.session.commit()
         reply = '开始跑步'
@@ -63,13 +64,16 @@ def handle(message):
         task.end_time = end_time
         task.credit = 1
         task.duration = duration
+        task.distance = duration.total_seconds() * task.speed / 1000.0
         task.finished = True
         user.total_time += duration
+        user.total_distance += task.distance
         user.credits += 1
         db.session.add(task)
         db.session.add(user)
         db.session.commit()
-        reply = '完成了跑步，本次跑步时间: %s s。累计跑步 %s s' % (duration, user.total_time)
+        reply = '完成了跑步，本次跑步时间: %s s。累计跑步 %s s. ' % (duration, user.total_time)
+        reply += '点击查看进展页面 http://taskcube.hqythu.me/wechat/share/%s/%s' % (user.id, task.id)
     else:
         raise CommandNotFoundException()
     return reply
