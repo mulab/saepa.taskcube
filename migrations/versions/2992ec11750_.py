@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: 482a7a2e263
+Revision ID: 2992ec11750
 Revises: None
-Create Date: 2015-12-07 14:05:31.095364
+Create Date: 2015-12-07 22:57:09.806460
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '482a7a2e263'
+revision = '2992ec11750'
 down_revision = None
 
 from alembic import op
@@ -24,6 +24,7 @@ def upgrade():
     sa.Column('openid', sa.Unicode(length=128), nullable=True),
     sa.Column('credits', sa.Integer(), nullable=True),
     sa.Column('total_time', sa.Interval(), nullable=True),
+    sa.Column('total_distance', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_openid'), 'users', ['openid'], unique=True)
@@ -36,6 +37,8 @@ def upgrade():
     sa.Column('start_time', sa.DateTime(), nullable=True),
     sa.Column('end_time', sa.DateTime(), nullable=True),
     sa.Column('duration', sa.Interval(), nullable=True),
+    sa.Column('speed', sa.Float(), nullable=True),
+    sa.Column('distance', sa.Integer(), nullable=True),
     sa.Column('finished', sa.Boolean(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.openid'], ),
