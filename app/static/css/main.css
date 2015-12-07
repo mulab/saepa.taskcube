@@ -1,0 +1,48 @@
+body {
+  text-align: center;
+  font-family: 'Microsoft YaHei', Serif;
+  font-size: 16px;
+  margin: 0 auto;
+}
+
+.row {
+  height: 100%;
+}
+
+.header {
+  padding-top: 25%;
+}
+
+.body {
+  padding-bottom: 5%;
+}
+
+.footer {
+}
+
+.btn {
+	color: orange;
+	border: solid orange 1px;
+	border-radius: 50px;
+	width: 150px;
+	background: transparent;
+}
+
+.btn:hover {
+	color: white;
+	background: orange;
+}
+
+.name, .project {
+	font-size: 120%;
+}
+
+.gray {
+	font-size: 80%;
+	color: gray;
+}
+
+.distance {
+	font-size: 150%;
+	color: orange;
+}

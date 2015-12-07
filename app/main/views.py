@@ -90,3 +90,8 @@ def login(openid):
         db.session.commit()
         return redirect('/wechat/success')
     return render_template('login.html', form=form)
+
+
+@main.route('/wechat/share', methods=['GET'])
+def share():
+    return render_template('share.html')
