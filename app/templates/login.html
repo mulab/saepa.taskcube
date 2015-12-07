@@ -3,15 +3,39 @@
 <head lang="zh">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <title>账号绑定</title>
 </head>
 <body>
-    <form method="post">
-        {{ form.hidden_tag() }} <br>
-        {{ form.name.label }} {{ form.name }} <br>
-        {{ form.email.label }} {{ form.email }} <br>
-        {{ form.mobile.label }} {{ form.mobile }} <br>
-        {{ form.submit }}
-    </form>
+    <div class="container">
+        <form method="post">
+            {{ form.hidden_tag() }} <br>
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                {{ form.mobile.label }}
+                {{ form.mobile }}
+            </div>
+
+            {{ form.submit }}
+        </form>
+    </div>
+<script src="/static/js/jquery-1.11.3.min.js"></script>
+<script>
+    $(function() {
+        $('input').addClass('form-control');
+        $('input:last')
+                .removeClass('form-control')
+                .addClass('btn')
+                .addClass('btn-default');
+    });
+</script>
 </body>
 </html>
+

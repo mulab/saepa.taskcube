@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField
 from wtforms import SubmitField
 from wtforms.validators import DataRequired
-from  wtforms.validators import Email
+from wtforms.validators import Email
 
 
 class UserForm(Form):
