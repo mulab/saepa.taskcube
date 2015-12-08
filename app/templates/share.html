@@ -27,9 +27,9 @@
             <div class="col-md-4 footer">
                 <p>达到450公里目标后，即可在金雅拓公司资助下，圆梦六名贫困孩子的北京之行</p>
                 <div class="logos">
-                    <span><img src="{{ url_for('static', filename='images/saepa.png') }}" alt="SAEPA" class="logo"></span>
-                    <span><img src="{{ url_for('static', filename='images/gemalto.jpg') }}" alt="Gemalto" class="logo"></span>
-                    <span><img src="{{ url_for('static', filename='images/labμ.png') }}" alt="Lab μ" class="logo"></span>
+                    <span><img src="{{ url_for('static', filename='images/saepa.jpg') }}" alt="SAEPA" class="saepa_logo"></span>
+                    <span><img src="{{ url_for('static', filename='images/gemalto.jpg') }}" alt="Gemalto" class="gemalto_logo"></span>
+                    <span><img src="{{ url_for('static', filename='images/labμ.png') }}" alt="Lab μ" class="labmu_logo"></span>
                 </div>
             </div>
         </div>
@@ -41,7 +41,9 @@
             $('.header').css("height", $(window).height() * 0.4 + 'px');
             $('.body').css("height", $(window).height() * 0.4 + 'px');
             $('.footer').css("height", $(window).height() * 0.2 + 'px');
-            $('.logo').css("width", $('.footer').width() / 5 + 'px');
+            $('.saepa_logo').css("width", $('.footer').width() / 3 + 'px');
+            $('.gemalto_logo').css("width", $('.footer').width() / 3 + 'px');
+            $('.labmu_logo').css("width", $('.footer').width() / 4.5 + 'px');
         })
     </script>
 </body>
