@@ -77,7 +77,7 @@ def handle(message):
         db.session.add(task)
         db.session.add(user)
         db.session.commit()
-        reply = '完成了跑步，本次跑步时间: %s s。本次跑步 %s km。' % (duration, task.distance)
+        reply = '完成了跑步，本次跑步时间: %s s。本次跑步 %s km。' % (round(duration, 3), round(task.distance, 3))
         reply += '点击查看【个人跑步里程档案】 http://taskcube.hqythu.me/wechat/share/%s/%s\n' % (user.id, task.id)
         reply += '（请分享至朋友圈，邀请更多朋友加入公益健康跑喔）\n\n'
         reply += '在您下一次开始跑步前：\n' \
