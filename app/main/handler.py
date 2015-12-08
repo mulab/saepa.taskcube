@@ -1,4 +1,3 @@
-from .tasks import TaskList
 from .exceptions import *
 from .. import db
 from ..models import User
@@ -42,8 +41,6 @@ def handle(message):
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
             return '你还有跑步没有完成'
-        task_config = TaskList['run']
-        task_config['validator'](user)
         speed = 2.5
         task = Task(key='run', name='run', credit=0, start_time=datetime.now(),
                     user=user, finished=False, need_validation=True, speed=speed)
@@ -54,8 +51,6 @@ def handle(message):
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
             return '你还有跑步没有完成'
-        task_config = TaskList['run']
-        task_config['validator'](user)
         speed = 4.0
         task = Task(key='run', name='run', credit=0, start_time=datetime.now(),
                     user=user, finished=False, need_validation=True, speed=speed)
