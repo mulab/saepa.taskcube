@@ -27,16 +27,13 @@ def handle(message):
     user = User.query.filter_by(openid=openid).first()
     if user is None:
         raise UserNotRegisteredException()
-    if message['Content'] in commands:
+    if message['Event'] == 'subscribe':
+        reply = '欢迎参与【“你跑一公里，助梦一公里”线上活动】！不论在操场还是健身房，不论在白天还是黑夜，只要您在跑步，' \
+                '即可使用该平台进行记录跑步里程记录。与其他清华学子一起，实现“450公里”跑步里程目标后，金雅拓公司（Gemalto）即为河北魏县一中的贫困学子提供往返北京的车票，圆梦其北京之行。\n' \
+                '首先，请您【绑定账号】：http://taskcube.hqythu.me/wechat/login/%s\n' \
+                '绑定账号成功后，回复任意内容继续。'
+    elif message['Content'] in commands:
         reply = commands[message['Content']](user)
-    elif message['Content'] == 'run':
-        reply = '在您开始跑步前：\n' \
-                '回复【01】进入慢速跑模式；\n' \
-                '回复【02】进入中/快速跑模式；\n\n' \
-                '在您完成跑步后：\n' \
-                '回复【end】记录跑步里程，形成个人跑步里程档案；\n\n' \
-                '您也可以报名12月12日上午10:30~11:30于紫操的线下跑步活动，届时有精美礼品赠送，和1小时志愿工时补助。' \
-                '报名请点击：http://'
     elif message['Content'] == '01':
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
@@ -84,5 +81,11 @@ def handle(message):
                  '回复【01】进入慢速跑模式；\n' \
                  '回复【02】进入中/快速跑模式；'
     else:
-        raise CommandNotFoundException()
+        reply = '在您开始跑步前：\n' \
+                '回复【01】进入慢速跑模式；\n' \
+                '回复【02】进入中/快速跑模式；\n\n' \
+                '在您完成跑步后：\n' \
+                '回复【end】记录跑步里程，形成个人跑步里程档案；\n\n' \
+                '您也可以报名12月12日上午10:30~11:30于紫操的线下跑步活动，届时有精美礼品赠送，和1小时志愿工时补助。' \
+                '报名请点击：http://www.sojump.com/m/6647877.aspx'
     return reply
