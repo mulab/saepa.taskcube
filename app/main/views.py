@@ -13,6 +13,7 @@ from .util import xmlparse
 from .util import construct_text_message
 from . import handler
 from .exceptions import *
+from sqlalchemy import func
 
 
 @main.route('/', methods=['GET'])
@@ -101,6 +102,10 @@ def login(openid):
 def share(userid, taskid):
     user = User.query.filter_by(id=userid).first()
     task = Task.query.filter_by(id=taskid).first()
+    if user is None or task is None:
+        abort(404)
     task.distance = round(task.distance, 3)
     user.total_distance = round(user.total_distance, 3)
-    return render_template('share.html', user=user, task=task)
+    total_distance = db.session.query(func.sum(User.total_distance)).filter().scalar()
+    total_distance = round(total_distance, 3)
+    return render_template('share.html', user=user, task=task, total_distance=total_distance)
