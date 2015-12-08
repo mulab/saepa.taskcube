@@ -30,24 +30,3 @@ def time_validator_generator(start, end):
         else:
             raise TimeNotMatchException()
     return time_validator
-
-
-TaskList = {
-    '1': {
-        'name': '1',
-        'validator': eachday_validator_generator('1'),
-        'credit': 1
-    },
-    '2': {
-        'name': '2',
-        'validator': time_validator_generator(time(hour=6, minute=0),
-                                              time(hour=7, minute=0)),
-        'credit': 2
-    },
-    'run': {
-        'name': 'run',
-        # 'validator': eachday_validator_generator('run'),
-        'validator': empty_validator,
-        'credit': 1
-    }
-}

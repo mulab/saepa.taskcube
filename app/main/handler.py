@@ -30,28 +30,38 @@ def handle(message):
         raise UserNotRegisteredException()
     if message['Content'] in commands:
         reply = commands[message['Content']](user)
-    # elif message['Content'] in TaskList:
-    #     task_config = TaskList[message['Content']]
-    #     task_config['validator'](user)
-    #     user.credits += task_config['credit']
-    #     task = Task(key=message['Content'], name=task_config['name'],
-    #                 credit=task_config['credit'], start_time=datetime.now(), user=user)
-    #     db.session.add(user)
-    #     db.session.add(task)
-    #     db.session.commit()
-    #     reply = "您成功完成了任务：%s，获得了积分：%d" % (task.name, task.credit)
-    elif message['Content'] == '01' or message['Content'] == '02':
+    elif message['Content'] == 'run':
+        reply = '在您开始跑步前：\n' \
+                '回复【01】进入慢速跑模式；\n' \
+                '回复【02】进入中/快速跑模式；\n\n' \
+                '在您完成跑步后：\n' \
+                '回复【end】记录跑步里程，形成个人跑步里程档案；\n\n' \
+                '您也可以报名12月12日上午10:30~11:30于紫操的线下跑步活动，届时有精美礼品赠送，和1小时志愿工时补助。' \
+                '报名请点击：http://'
+    elif message['Content'] == '01':
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
             return '你还有跑步没有完成'
         task_config = TaskList['run']
         task_config['validator'](user)
-        speed = 1.0 if message['Content'] == '01' else 2.0
+        speed = 2.5
         task = Task(key='run', name='run', credit=0, start_time=datetime.now(),
                     user=user, finished=False, need_validation=True, speed=speed)
         db.session.add(task)
         db.session.commit()
-        reply = '开始跑步'
+        reply = '开始慢速跑！当您跑步结束后，请回复【end】以记录跑步里程。'
+    elif message['Content'] == '02':
+        task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
+        if task is not None:
+            return '你还有跑步没有完成'
+        task_config = TaskList['run']
+        task_config['validator'](user)
+        speed = 4.0
+        task = Task(key='run', name='run', credit=0, start_time=datetime.now(),
+                    user=user, finished=False, need_validation=True, speed=speed)
+        db.session.add(task)
+        db.session.commit()
+        reply = '开始快速跑！当您跑步结束后，请回复【end】以记录跑步里程。'
     elif message['Content'] == 'end':
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is None:
@@ -72,8 +82,12 @@ def handle(message):
         db.session.add(task)
         db.session.add(user)
         db.session.commit()
-        reply = '完成了跑步，本次跑步时间: %s s。本次跑步 %s km. ' % (duration, task.distance)
-        reply += '点击查看进展页面 http://taskcube.hqythu.me/wechat/share/%s/%s' % (user.id, task.id)
+        reply = '完成了跑步，本次跑步时间: %s s。本次跑步 %s km。' % (duration, task.distance)
+        reply += '点击查看【个人跑步里程档案】 http://taskcube.hqythu.me/wechat/share/%s/%s\n' % (user.id, task.id)
+        reply += '（请分享至朋友圈，邀请更多朋友加入公益健康跑喔）\n\n'
+        reply += '在您下一次开始跑步前：\n' \
+                 '回复【01】进入慢速跑模式；\n' \
+                 '回复【02】进入中/快速跑模式；'
     else:
         raise CommandNotFoundException()
     return reply

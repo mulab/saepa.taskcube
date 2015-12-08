@@ -45,23 +45,26 @@ def wechat_response():
     except UserNotRegisteredException:
         reply = construct_text_message(
             message,
-            Markup('你需要绑定账号：http://taskcube.hqythu.me/wechat/login/%s' %
+            Markup('欢迎参与【“你跑一公里，助梦一公里”线上活动】！不论在操场还是健身房，不论在白天还是黑夜，只要您在跑步，'
+                   '即可使用该平台进行记录跑步里程记录。与其他清华学子一起，实现“450公里”跑步里程目标后，金雅拓公司（Gemalto）即为河北魏县一中的贫困学子提供往返北京的车票，圆梦其北京之行。\n'
+                   '首先，请您【绑定账号】：http://taskcube.hqythu.me/wechat/login/\n'
+                   '绑定账号成功后，回复任意内容继续。' %
                    message.get('FromUserName', ''))
         )
     except CommandNotFoundException:
         reply = construct_text_message(
             message,
-            '不知道您在说什么'
+            '不知道您在说什么。'
         )
     except AlreadyDoTodayException:
         reply = construct_text_message(
             message,
-            '您今天已经领取过该任务了'
+            '您今天已经领取过该任务了。'
         )
     except TimeNotMatchException:
         reply = construct_text_message(
             message,
-            '现在这个时间不能领取该任务'
+            '现在这个时间不能领取该任务。'
         )
     # except:
     #     reply = construct_text_message(
