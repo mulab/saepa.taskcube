@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" media="screen" title="no title" charset="utf-8">
-    <title>助梦清华，我今天通过跑步，助梦了{{ task.distance / 1000.0 }}公里</title>
+    <title>助梦清华，我今天通过跑步，助梦了{{ task.distance }}公里</title>
 </head>
 <body>
     <div class="container">
@@ -17,10 +17,10 @@
             </div>
             <div class="col-md-4 body">
                 <p class="gray">本次捐赠里程数</p>
-                <p class="distance">{{ task.distance / 1000.0 }}公里</p>
-                <p class="gray">本人共捐赠里程数为{{ user.total_distance / 1000.0 }}公里</p>
+                <p class="distance">{{ task.distance }}公里</p>
+                <p class="gray">本人共捐赠里程数为{{ user.total_distance }}公里</p>
                 <p class="gray">本项目累计收到{{ total_distance }}公里捐赠里程数</p>
-                <button type="button" name="button" class="btn btn-default">去看看</button>
+                <a href="/"><button type="button" name="button" class="btn btn-default">去看看</button></a>
             </div>
             <div class="col-md-4 footer">
                 <p>达到450公里目标后，即可在金雅拓公司资助下，圆梦六名贫困孩子的北京之行</p>

@@ -97,4 +97,6 @@ def login(openid):
 def share(userid, taskid):
     user = User.query.filter_by(id=userid).first()
     task = Task.query.filter_by(id=taskid).first()
+    task.distance = round(task.distance, 3)
+    user.total_distance = round(user.total_distance, 3)
     return render_template('share.html', user=user, task=task)
