@@ -30,16 +30,16 @@ def handle(message):
         raise UserNotRegisteredException()
     if message['Content'] in commands:
         reply = commands[message['Content']](user)
-    elif message['Content'] in TaskList:
-        task_config = TaskList[message['Content']]
-        task_config['validator'](user)
-        user.credits += task_config['credit']
-        task = Task(key=message['Content'], name=task_config['name'],
-                    credit=task_config['credit'], start_time=datetime.now(), user=user)
-        db.session.add(user)
-        db.session.add(task)
-        db.session.commit()
-        reply = "您成功完成了任务：%s，获得了积分：%d" % (task.name, task.credit)
+    # elif message['Content'] in TaskList:
+    #     task_config = TaskList[message['Content']]
+    #     task_config['validator'](user)
+    #     user.credits += task_config['credit']
+    #     task = Task(key=message['Content'], name=task_config['name'],
+    #                 credit=task_config['credit'], start_time=datetime.now(), user=user)
+    #     db.session.add(user)
+    #     db.session.add(task)
+    #     db.session.commit()
+    #     reply = "您成功完成了任务：%s，获得了积分：%d" % (task.name, task.credit)
     elif message['Content'] == '01' or message['Content'] == '02':
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.start_time.desc()).first()
         if task is not None:
@@ -72,7 +72,7 @@ def handle(message):
         db.session.add(task)
         db.session.add(user)
         db.session.commit()
-        reply = '完成了跑步，本次跑步时间: %s s。累计跑步 %s s. ' % (duration, user.total_time)
+        reply = '完成了跑步，本次跑步时间: %s s。本次跑步 %s km. ' % (duration, task.distance)
         reply += '点击查看进展页面 http://taskcube.hqythu.me/wechat/share/%s/%s' % (user.id, task.id)
     else:
         raise CommandNotFoundException()
