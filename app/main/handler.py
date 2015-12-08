@@ -16,22 +16,23 @@ def query_credits(user):
 
 
 commands = {
-    '任务': view_tasks,
-    '积分': query_credits,
-    '查询': query_credits
+    # '任务': view_tasks,
+    # '积分': query_credits,
+    # '查询': query_credits
 }
 
 
 def handle(message):
-    openid = message.get('FromUserName', '')
-    user = User.query.filter_by(openid=openid).first()
-    if user is None:
-        raise UserNotRegisteredException()
-    if message['Event'] == 'subscribe':
+    if message.get('Event', '') == 'subscribe':
         reply = '欢迎参与【“你跑一公里，助梦一公里”线上活动】！不论在操场还是健身房，不论在白天还是黑夜，只要您在跑步，' \
                 '即可使用该平台进行记录跑步里程记录。与其他清华学子一起，实现“450公里”跑步里程目标后，金雅拓公司（Gemalto）即为河北魏县一中的贫困学子提供往返北京的车票，圆梦其北京之行。\n' \
                 '首先，请您【绑定账号】：http://taskcube.hqythu.me/wechat/login/%s\n' \
                 '绑定账号成功后，回复任意内容继续。'
+        return reply
+    openid = message.get('FromUserName', '')
+    user = User.query.filter_by(openid=openid).first()
+    if user is None:
+        raise UserNotRegisteredException()
     elif message['Content'] in commands:
         reply = commands[message['Content']](user)
     elif message['Content'] == '01':
