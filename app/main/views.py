@@ -68,11 +68,11 @@ def wechat_response():
             message,
             '现在这个时间不能领取该任务。'
         )
-    except:
-        reply = construct_text_message(
-            message,
-            '系统出了一点问题'
-        )
+    # except:
+    #     reply = construct_text_message(
+    #         message,
+    #         '系统出了一点问题'
+    #     )
     return render_template('reply_text.xml', msg=reply)
 
 
