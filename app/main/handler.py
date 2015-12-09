@@ -62,6 +62,9 @@ def handle(message):
         start_time = task.start_time
         end_time = datetime.now()
         if start_time + timedelta(hours=2) < end_time:
+            task.finished = True
+            db.session.add(task)
+            db.session.commit()
             return '超时'
         duration = end_time - start_time
         task.end_time = end_time
