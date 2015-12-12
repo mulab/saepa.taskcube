@@ -84,7 +84,7 @@ def success():
 @main.route('/wechat/login/<openid>', methods=['GET', 'POST'])
 def login(openid):
     form = UserForm()
-    user = User.query.filter_by(openid=openid)
+    user = User.query.filter_by(openid=openid).first()
     if user is not None:
         return redirect('/wechat/success')
     if form.validate_on_submit():
