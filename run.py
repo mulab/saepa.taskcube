@@ -9,5 +9,5 @@ app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 
 http_server = HTTPServer(WSGIContainer(app))
-http_server.listen(5000)
+http_server.listen(80)
 IOLoop.instance().start()

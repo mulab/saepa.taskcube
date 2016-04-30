@@ -3,17 +3,21 @@ from flask import render_template
 from flask import redirect
 from flask import Markup
 from flask import abort
+from flask import g
 from . import main
 from .forms import UserForm
 from .. import db
+from .. import wechat_conf
 from ..models import User
 from ..models import Task
-from .util import check
-from .util import xmlparse
-from .util import construct_text_message
-from . import handler
-from .exceptions import *
 from sqlalchemy import func
+from wechat_sdk import WechatBasic
+from wechat_sdk.messages import *
+
+
+@main.before_request
+def wechat_binder():
+    g.wechat = WechatBasic(wechat_conf)
 
 
 @main.route('/', methods=['GET'])
@@ -23,57 +27,86 @@ def hello_world():
 
 @main.route('/wechat', methods=['GET'])
 def wechat_check():
-    check_result = check.check_signature(
+    if g.wechat.check_signature(
         request.args.get('signature', ''),
         request.args.get('timestamp', ''),
         request.args.get('nonce', ''),
-        request.args.get('echostr', '')
-    )
-    if check_result:
+    ):
         return request.args.get('echostr', '')
     else:
-        return ''
+        return 'check signature error'
 
 
 @main.route('/wechat', methods=['POST'])
 def wechat_response():
-    message = xmlparse.get_message_by_xml(request.data)
-    # TODO: 在Exception类内部处理回复信息而不是在这里使用多路的选择
-    try:
-        reply = construct_text_message(
-            message,
-            handler.handle(message)
+    g.wechat.parse_data(request.data)
+    wechat = g.wechat
+    openid = wechat.message.source
+    user = User.query.filter_by(openid=openid).first()
+    if user is None:
+        user = User(
+            openid=openid,
         )
-    except UserNotRegisteredException:
-        reply = construct_text_message(
-            message,
-            Markup('欢迎参与【“你跑一公里，助梦一公里”线上活动】！不论在操场还是健身房，不论在白天还是黑夜，只要您在跑步，'
-                   '即可使用该平台进行记录跑步里程记录。与其他清华学子一起，实现“450公里”跑步里程目标后，金雅拓公司（Gemalto）即为河北魏县一中的贫困学子提供往返北京的车票，圆梦其北京之行。\n'
-                   '首先，请您【绑定账号】：http://taskcube.hqythu.me/wechat/login/%s\n'
-                   '绑定账号成功后，回复任意内容继续。' %
-                   message.get('FromUserName', ''))
+        db.session.add(user)
+        db.session.commit()
+    if isinstance(wechat.message, EventMessage):
+        return wechat.response_text(
+            content='嗨~魔方君终于等到你啦。在这里，你可以把跑步的里程兑换成公益捐款哦。'
+                    '只需要每次跑完步动动手指，把跑步APP截图和里程回复给魔方君，就是在做公益哦。'
+                    '同怀公益梦，即是有缘人。用双脚跑出爱，跑出可能。愿你和魔方君玩得开心~'
+                    '回复关键词“跑步”，即可参与。'
         )
-    except CommandNotFoundException:
-        reply = construct_text_message(
-            message,
-            '不知道您在说什么。'
+    elif isinstance(wechat.message, TextMessage):
+        content = wechat.message.content
+        if content == '绑定':
+            pass
+        elif content == '跑步':
+            return wechat.response_text(
+                content='此处应有各种指南'
+            )
+        elif content == '兑换':
+            return wechat.response_text(
+                content='今天跑步完成了吧~回复【跑步APP截图】来告诉魔方君这次的成果吧。'
+                        'p.s.跑完步，散散步，喝口水，休息，休息一下。'
+            )
+        else:
+            try:
+                distance = float(content)
+            except ValueError:
+                return wechat.response_text(
+                    content='指令错误'
+                )
+            task = Task.query.filter_by(user=user, finished=False).order_by(Task.id.desc()).first()
+            if task is None:
+                return wechat.response_text(
+                    content='请先回复跑步截图~'
+                )
+            task.distance = distance
+            task.finished = True
+            user.total_distance += distance
+            db.session.add(user)
+            db.session.add(task)
+            db.session.commit()
+            return wechat.response_text(
+                content='兑换成功！你通过此次跑步兑换了撒爱奖学金%s元，点击本网址查看个人跑步记录：'
+                        'http://taskcube.heqinyao.com/wechat/share/%s/%s' % (distance, user.id, task.id)
+            )
+    elif isinstance(wechat.message, ImageMessage):
+        task = Task.query.filter_by(user=user, finished=False).order_by(Task.id.desc()).first()
+        if task is not None:
+            return wechat.response_text(
+                content='还没有回复上一次跑步的里程~'
+            )
+        task = Task(key='run', distance=0, user=user, finished=False)
+        db.session.add(task)
+        db.session.commit()
+        return wechat.response_text(
+            content='回复魔方君这次的【跑步里程（km）】吧~要与截图保持一致哦（回复数字即可，如回复“1.5”，即表示跑步里程为1.5km）'
         )
-    except AlreadyDoTodayException:
-        reply = construct_text_message(
-            message,
-            '您今天已经领取过该任务了。'
+    else:
+        return wechat.response_text(
+            content='unknown'
         )
-    except TimeNotMatchException:
-        reply = construct_text_message(
-            message,
-            '现在这个时间不能领取该任务。'
-        )
-    # except:
-    #     reply = construct_text_message(
-    #         message,
-    #         '系统出了一点问题'
-    #     )
-    return render_template('reply_text.xml', msg=reply)
 
 
 @main.route('/wechat/success', methods=['GET'])
