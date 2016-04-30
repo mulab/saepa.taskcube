@@ -1,4 +1,11 @@
-web:
-  build: .
-  volumes:
-   - .:/www
+version: '2'
+services:
+  web:
+    build: .
+    env_file:
+     - ./wechat.env
+    volumes:
+     - db:usr/src/app/db
+volumes:
+  db:
+    driver: local
