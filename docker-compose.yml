@@ -6,6 +6,9 @@ services:
      - ./wechat.env
     volumes:
      - db:/usr/src/app/db
+    networks:
+     - globalproxy_default
+     - default
 volumes:
   db:
     driver: local
