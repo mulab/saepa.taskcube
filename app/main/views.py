@@ -124,16 +124,21 @@ def success():
 def login(openid):
     form = UserForm()
     user = User.query.filter_by(openid=openid).first()
-    if user is not None:
+    if user is not None and user.email != '':
         return redirect('/wechat/success')
     if form.validate_on_submit():
-        user = User(
-            name=form.name.data,
-            email=form.email.data,
-            mobile=form.mobile.data,
-            openid=openid,
-            credits=0
-        )
+        if user is None:
+            user = User(
+                name=form.name.data,
+                email=form.email.data,
+                mobile=form.mobile.data,
+                openid=openid,
+                credits=0
+            )
+        else:
+            user.name = form.name.data
+            user.email = form.email.data
+            user.mobile = form.mobile.data
         db.session.add(user)
         db.session.commit()
         return redirect('/wechat/success')
