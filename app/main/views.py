@@ -1,7 +1,6 @@
 from flask import request
 from flask import render_template
 from flask import redirect
-from flask import Markup
 from flask import abort
 from flask import g
 from . import main
@@ -59,10 +58,17 @@ def wechat_response():
     elif isinstance(wechat.message, TextMessage):
         content = wechat.message.content
         if content == '绑定':
-            pass
+            return wechat.response_text(
+                content='点击下面的链接绑定账号: \n'
+                        'http://taskcube.heqinyao.com/login/%s' % openid
+            )
         elif content == '跑步':
             return wechat.response_text(
-                content='此处应有各种指南'
+                content='使用说明：\n'
+                        '①今天跑了步，相把跑步里程换成公益捐款？试试回复关键词“兑换”吧\n'
+                        '②回复一张【跑步app截图\n'
+                        '③回复这次的【跑步里程（km）】，要与截图保持一致哦（回复数字即可）\n'
+                        '④兑换成功'
             )
         elif content == '兑换':
             return wechat.response_text(
