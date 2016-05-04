@@ -60,7 +60,7 @@ def wechat_response():
         if content == '绑定':
             return wechat.response_text(
                 content='点击下面的链接绑定账号: \n'
-                        'http://taskcube.heqinyao.com/login/%s' % openid
+                        'http://taskcube.heqinyao.com/wechat/login/%s' % openid
             )
         elif content == '跑步':
             return wechat.response_text(
