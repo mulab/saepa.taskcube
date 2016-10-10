@@ -90,7 +90,7 @@ def wechat_response():
                 )
             task.distance = distance
             task.finished = True
-            user.total_distance += distance
+            task.finish_time = datetime.datetime.now()
             db.session.add(user)
             db.session.add(task)
             db.session.commit()
