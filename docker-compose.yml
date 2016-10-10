@@ -5,10 +5,11 @@ services:
     env_file:
      - ./wechat.env
     volumes:
-     - db:/usr/src/app/db
+     - ./db:/usr/src/app/db
     networks:
      - globalproxy_default
      - default
+    restart: always
 volumes:
   db:
     driver: local
