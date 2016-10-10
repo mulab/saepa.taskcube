@@ -11,7 +11,7 @@ class User(db.Model):
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
-        return '<User: %s, ID: %s, Credits: %s>' % (self.name, self.openid, self.credits)
+        return '<User: %s, ID: %s>' % (self.name, self.openid)
 
 
 class Task(db.Model):
@@ -21,8 +21,8 @@ class Task(db.Model):
     distance = db.Column(db.Float)
     finished = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
-    datatime = db.Column(db.DateTime)
+    finish_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Task: %s, Credits: %s, User: %s, DateTime: %s>' % \
-               (self.name, self.credit, self.user_id, self.datetime)
+               (self.key, self.distance, self.user_id, self.finish_time)
