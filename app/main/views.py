@@ -12,6 +12,7 @@ from ..models import Task
 from sqlalchemy import func
 from wechat_sdk import WechatBasic
 from wechat_sdk.messages import *
+import datetime
 
 
 @main.before_request
@@ -94,7 +95,7 @@ def wechat_response():
             db.session.add(task)
             db.session.commit()
             return wechat.response_text(
-                content='兑换成功！你通过此次跑步兑换了撒爱奖学金%s元，点击本网址查看个人跑步记录：'
+                content='兑换成功！你通过此次跑步兑换孩子们来北京的路程%s公里，点击本网址查看个人跑步记录：'
                         'http://taskcube.heqinyao.com/wechat/share/%s/%s' % (distance, user.id, task.id)
             )
     elif isinstance(wechat.message, ImageMessage):
@@ -103,7 +104,7 @@ def wechat_response():
             return wechat.response_text(
                 content='还没有回复上一次跑步的里程~'
             )
-        task = Task(key='run', distance=0, user=user, finished=False)
+        task = Task(key='run', distance=0, user=user, finished=False, datetime=datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
         return wechat.response_text(
@@ -151,8 +152,10 @@ def share(userid, taskid):
     task = Task.query.filter_by(id=taskid).first()
     if user is None or task is None:
         abort(404)
+    user_distance = db.session.query(func.sum(Task.distance)).filter(user=user).scalar()
+    total_distance = db.session.query(func.sum(Task.distance)).filter().scalar()
     task.distance = round(task.distance, 3)
-    user.total_distance = round(user.total_distance, 3)
-    total_distance = db.session.query(func.sum(User.total_distance)).filter().scalar()
+    user_distance = round(user_distance, 3)
     total_distance = round(total_distance, 3)
-    return render_template('share.html', user=user, task=task, total_distance=total_distance)
+    return render_template('share.html', task=task,
+                           user_distance=user_distance, total_distance=total_distance)

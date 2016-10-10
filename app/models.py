@@ -8,7 +8,6 @@ class User(db.Model):
     email = db.Column(db.Unicode(64), default='')
     mobile = db.Column(db.Unicode(64), default='')
     openid = db.Column(db.Unicode(128), default='', unique=True, index=True)
-    total_distance = db.Column(db.Float, default=0)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
@@ -22,6 +21,7 @@ class Task(db.Model):
     distance = db.Column(db.Float)
     finished = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('users.openid'))
+    datatime = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Task: %s, Credits: %s, User: %s, DateTime: %s>' % \
