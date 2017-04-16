@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" media="screen" title="no title" charset="utf-8">
-    <title>助梦清华，我今天通过跑步，助梦了{{ task.distance }}公里</title>
+    <title>享读计划，我今天通过跑步，筑梦了{{ task.distance }}公里</title>
 </head>
 <body>
     <div class="container">
@@ -21,11 +21,11 @@
                 <p class="gray">本项目累计收到{{ total_distance }}公里捐赠里程数</p>
                 <p class="gray">本项目共需筹集里程450*8=3600公里</p>
                 <a href="http://mp.weixin.qq.com/s?__biz=MzA5NzMwODczNg==&mid=2650167350&idx=1&sn=c78356e2d2cde7f9a79b058db093f6e6&chksm=88a02119bfd7a80fdf563078d3440350d3ffea2b3a2205eed583ca23029ef4b7e3a53151926e&mpshare=1&scene=1&srcid=0923JtVFWiEKVq7m69tFPOAK&from=singlemessage&isappinstalled=0#wechat_redirect">
-                    <button type="button" name="button" class="btn btn-default">去看看</button>
+                    <button type="button" name="button" cl ass="btn btn-default">去看看</button>
                 </a>
             </div>
             <div class="col-md-4 footer">
-                <p>你跑的每一公里, 都会兑换成"筑梦清华"中孩子们来北京放学的一公里路费</p>
+                <p>你跑过的每一公里, 都将通过享读计划，变成孩子们手中的一本书，为孩子们搭建进步的阶梯。</p>
                 <div class="logos">
                     <span><img src="{{ url_for('static', filename='images/saepa.jpg') }}" alt="SAEPA" class="saepa_logo"></span>
                     <span><img src="{{ url_for('static', filename='images/labμ.jpg') }}" alt="Lab μ" class="labmu_logo"></span>
@@ -41,7 +41,6 @@
             $('.body').css("height", $(window).height() * 0.4 + 'px');
             $('.footer').css("height", $(window).height() * 0.2 + 'px');
             $('.saepa_logo').css("width", $('.footer').width() / 3 + 'px');
-            $('.gemalto_logo').css("width", $('.footer').width() / 3 + 'px');
             $('.labmu_logo').css("width", $('.footer').width() / 5 + 'px');
         })
     </script>
