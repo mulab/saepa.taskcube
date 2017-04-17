@@ -95,8 +95,8 @@ def wechat_response():
             db.session.add(task)
             db.session.commit()
             return wechat.response_text(
-                content='兑换成功！你通过此次跑步兑换孩子们来北京的路程%s公里，点击本网址查看个人跑步记录：'
-                        'http://taskcube.heqinyao.com/wechat/share/%s/%s' % (distance, user.id, task.id)
+                content='兑换成功！你通过此次跑步成功为孩子们的图书室添置了书籍，点击本网址查看个人跑步记录：'
+                        'http://taskcube.heqinyao.com/wechat/share/%s/%s' % (user.id, task.id)
             )
     elif isinstance(wechat.message, ImageMessage):
         task = Task.query.filter_by(user=user, finished=False).order_by(Task.id.desc()).first()
